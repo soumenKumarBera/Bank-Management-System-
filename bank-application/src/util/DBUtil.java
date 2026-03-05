@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-    private static String dbName = "jdvc:mysql://127.0.0.1:3306/BankManagment";
+    private static String dbName = "jdbc:mysql://127.0.0.1:3306/BankManagment";
     private static String userName = "root";
     private static String password = "0417@2003";
 

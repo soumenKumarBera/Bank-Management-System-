@@ -3,16 +3,15 @@ package dao;
 import model.Customer;
 import util.DBUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CustomerDao {
     public int createCustomer(Customer customer) throws SQLException{
         String sql = "insert into Customers(FirstName, LastName, Email, PhoneNumber, Address, PanNumber, AaadharNumber) values(?, ?, ?, ?, ?, ?, ?)";
-        try{
-            Connection connection = DBUtil.getConnection();
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try(Connection connection = DBUtil.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+
+
 
             ps.setString(1, customer.getFirstName());
             ps.setString(2, customer.getLastName());
@@ -20,7 +19,21 @@ public class CustomerDao {
             ps.setString(4, customer.getPanNumber());
             ps.setString(5, customer.getAadres());
             ps.setString(6, customer.getPanNumber());
-            ps.setLong(1, customer.getAadharNumber());
+            ps.setLong(7, customer.getAadharNumber());
+
+
+            int affectedRaw = ps.executeUpdate();
+
+            if(affectedRaw == 0) return -1;
+
+
+            try(ResultSet resultSet =ps.getGeneratedKeys()) {
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+
+            };
+
 
 
 
@@ -28,10 +41,8 @@ public class CustomerDao {
 
 
 
-         finally {
 
-        }
-return 0;
+return -1;
 
     }
 }
