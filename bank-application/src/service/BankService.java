@@ -3,9 +3,11 @@ package service;
 import dao.AccountDao;
 import dao.CustomerDao;
 import dao.TransactionDao;
+import model.Account;
 import model.Customer;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class BankService {
@@ -22,7 +24,19 @@ public class BankService {
 
         //than, you have to insert the details of this particlular customer into the DBMS.
         try{
-            customerDao.createCustomer(customer);
+         int customerId =   customerDao.createCustomer(customer);
+         if(customerId == -1){
+             System.out.println("Failed to create customer db");
+             return;
+         }
+
+         long accNumber = (long) Math.random() * 10000000000000l;
+
+            Account account = new Account(accNumber, customerId, "Saving", 0.0d, "Active", LocalDate.now());
+
+         accountDao.createBankAccount(account);
+
+
 
         } catch (SQLException e) {
             System.out.println("Erro : " +e.getMessage());

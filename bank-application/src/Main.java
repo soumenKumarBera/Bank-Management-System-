@@ -32,10 +32,11 @@ public class Main {
                case 1:
                    System.out.println("For creating a bank account, please provide the following details of bank account holder: ");
                    System.out.print("First name : ");
-                   String fname = sc.nextLine();
-                    sc.nextLine();
+                   String fname = sc.next();
+
                    System.out.print("Last name : ");
-                   String lname = sc.nextLine();
+                   String lname = sc.next();
+                   sc.nextLine();
 
                    System.out.print("email-id : ");
                    String email = sc.nextLine();
