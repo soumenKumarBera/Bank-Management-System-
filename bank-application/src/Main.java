@@ -56,6 +56,10 @@ public class Main {
                    services.createAccount(fname, lname, email, phoneNumber,  address, adharNumber, panNumber);
                    break;
                case 2:
+                   System.out.print("Enter Your Account Number: ");
+                   long accNumber = sc.nextLong();
+                   services.closeAccount(accNumber);
+
                case 3:
                case 4:
                case 5:

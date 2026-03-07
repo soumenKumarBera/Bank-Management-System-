@@ -3,6 +3,7 @@ package service;
 import dao.AccountDao;
 import dao.CustomerDao;
 import dao.TransactionDao;
+import exceptions.AcountNotFountException;
 import model.Account;
 import model.Customer;
 
@@ -30,16 +31,31 @@ public class BankService {
              return;
          }
 
-         long accNumber = (long) Math.random() * 10000000000000l;
+         long accNumber = (long) (Math.random() * 1000000000000l) + 1;
 
             Account account = new Account(accNumber, customerId, "Saving", 0.0d, "Active", LocalDate.now());
 
-         accountDao.createBankAccount(account);
-
-
-
+         if(accountDao.createBankAccount(account)){
+             System.out.println("Bank Account create sucessfully.\nYour account number is: " + accNumber);
+            }else {
+             System.out.println("Failed to create account");
+         }
         } catch (SQLException e) {
             System.out.println("Erro : " +e.getMessage());
+        }
+    };
+
+    public void closeAccount(long accNumber) {
+        try{
+            Account account = accountDao.getAccount(accNumber);
+            if (account == null){
+                throw new AcountNotFountException("Account not fount in bank recored");
+            }else {
+
+            }
+
+        }catch (AcountNotFountException | SQLException e){
+            System.out.println(e.getMessage());
         }
 
 
