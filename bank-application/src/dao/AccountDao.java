@@ -35,22 +35,22 @@ public class AccountDao {
     }
 
     public Account getAccount(long accNumber) throws SQLException {
-        String sql = (" select * from bankaccounts where  AccountNumber = ? ");
+        String sql = (" SELECT * FROM bankaccounts WHERE  AccountNumber = ?");
 
         try(Connection con = DBUtil.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)){
 
             ps.setLong(1, accNumber);
 
-            try(ResultSet rs = ps.executeQuery()){
-              if(rs.next()){
+            try(ResultSet resultSet = ps.executeQuery()){
+              if(resultSet.next()){
                 return new Account(
-                        rs.getLong("AccountNumber"),
-                        rs.getInt("customerId"),
-                        rs.getString("AccountType"),
-                        rs.getDouble("balance"),
-                        rs.getString("status"),
-                        rs.getDate("OpeningDate").toLocalDate()
+                        resultSet.getLong("AccountNumber"),
+                        resultSet.getInt("customerId"),
+                        resultSet.getString("AccountType"),
+                        resultSet.getDouble("balance"),
+                        resultSet.getString("status"),
+                        resultSet.getDate("OpeningDate").toLocalDate()
 
 
                 );
@@ -64,4 +64,30 @@ public class AccountDao {
 
 
     }
+
+
+    public boolean closeBankAccount(long accNumber) throws SQLException{
+
+        String sql = ("update bankaccounts set status =  'Closed'  where AccountNumber = ?");
+        try(Connection con = DBUtil.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)
+        ){
+            ps.setLong(1, accNumber);
+
+           int value = ps.executeUpdate();
+
+           if(value > 0){
+               return true;
+           }else {
+               return false;
+           }
+
+
+
+        }
+
+
+
+    }
+
 }

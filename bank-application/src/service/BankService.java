@@ -3,6 +3,7 @@ package service;
 import dao.AccountDao;
 import dao.CustomerDao;
 import dao.TransactionDao;
+import exceptions.AccountCloseException;
 import exceptions.AcountNotFountException;
 import model.Account;
 import model.Customer;
@@ -50,11 +51,21 @@ public class BankService {
             Account account = accountDao.getAccount(accNumber);
             if (account == null){
                 throw new AcountNotFountException("Account not fount in bank recored");
+            }
+            if(account.getStatus().equalsIgnoreCase("closed")){
+                throw new AccountCloseException("Account alredy closed ");
             }else {
+                if(accountDao.closeBankAccount( accNumber)){
+                    System.out.println("Bank Account number: " + accNumber + " closed successfully.");
 
+                }else{
+                    System.out.println("Failed to Close bank account. Please try again");
+                }
             }
 
-        }catch (AcountNotFountException | SQLException e){
+
+
+        }catch (AcountNotFountException |  AccountCloseException | SQLException e ){
             System.out.println(e.getMessage());
         }
 

@@ -16,7 +16,7 @@ public class CustomerDao {
             ps.setString(1, customer.getFirstName());
             ps.setString(2, customer.getLastName());
             ps.setString(3, customer.getEmail());
-            ps.setString(4, customer.getPanNumber());
+            ps.setString(4, customer.getPhoneNumber());
             ps.setString(5, customer.getAadres());
             ps.setString(6, customer.getPanNumber());
             ps.setLong(7, customer.getAadharNumber());

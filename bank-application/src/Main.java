@@ -59,6 +59,7 @@ public class Main {
                    System.out.print("Enter Your Account Number: ");
                    long accNumber = sc.nextLong();
                    services.closeAccount(accNumber);
+                   break;
 
                case 3:
                case 4:
