@@ -90,4 +90,21 @@ public class AccountDao {
 
     }
 
+    public boolean updateAccount( Account account) throws SQLException {
+        String sql = ("update bankaccounts set balance = ? where AccountNumber = ?");
+
+        try(Connection con = DBUtil.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)){
+
+            ps.setDouble(1, account.getBankBalance());
+            ps.setLong(2,account.getAccNumber());
+
+            return ps.executeUpdate() == 1 ;
+
+        }
+
+
+
+    }
+
 }

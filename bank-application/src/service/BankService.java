@@ -5,8 +5,11 @@ import dao.CustomerDao;
 import dao.TransactionDao;
 import exceptions.AccountCloseException;
 import exceptions.AcountNotFountException;
+import exceptions.InsufficientBlanceException;
+import exceptions.InvaildAmountException;
 import model.Account;
 import model.Customer;
+import model.Transaction;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -71,4 +74,48 @@ public class BankService {
 
 
     }
+
+    public void withdraw(long accNumber, double amount){
+        try {
+            if(amount < 0) {
+               throw new InvaildAmountException("Unable to initiate transaction due to nagetive amount input");
+            }else if(amount == 0) {
+                throw  new InvaildAmountException("Unable to initiate transaction. Enter amount grater than 0.");
+            }else {
+                Account account = accountDao.getAccount(accNumber);
+                if (account == null){
+                    throw new AcountNotFountException("Invalid bank Account number entered.");
+                }if(account.getStatus().equalsIgnoreCase("closed")){
+                    throw new AccountCloseException("Account alredy closed..");
+                }
+
+                // SAVINF ACCOUNT = min_balance = 0
+                //CURRENT ACCOUNT = min_balance = -1000;
+
+                double min_balance = account.getAccountType().equalsIgnoreCase("Saving") ? 0 : -1000;
+                if(account.getBankBalance() - amount < min_balance){
+                    throw new InsufficientBlanceException("Enter withdrawal amount exceeds the minimum balance rules of bank account.");
+
+                }
+
+                // now i wile allow the trsaction
+                account.setBankBalance(account.getBankBalance() - amount);
+
+
+                if ( accountDao.updateAccount(account)){
+
+                    Transaction tObj = new Transaction(account.getAccNumber(),"WithDraw",amount,LocalDate.now(),0,"Successfull Transaction");
+                    transactionDao.addTransaction(tObj);
+                }
+
+            }
+
+        } catch (InvaildAmountException |SQLException | AcountNotFountException | AccountCloseException | InsufficientBlanceException e) {
+            System.out.println("Error" + e.getMessage());
+        }
+
+
+
+    }
+
 }

@@ -62,6 +62,23 @@ public class Main {
                    break;
 
                case 3:
+                   System.out.print("Enter Your Account Number: ");
+                    accNumber = sc.nextLong();
+
+                   System.out.print("Enter Ammount: ");
+
+                   double amount = sc.nextDouble();
+
+                   if(amount < 0){
+                       System.out.println("Unable to initiate transaction due to nagetive amount input");
+                   }else if(amount == 0){
+                       System.out.println("Unable to initiate transaction. Enter amount grater than 0.");
+                   }else{
+                       services.withdraw(accNumber, amount);
+                   }
+
+
+
                case 4:
                case 5:
                case 6:
